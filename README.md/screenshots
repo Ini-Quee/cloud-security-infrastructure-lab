@@ -1,0 +1,75 @@
+# Cloud Security & Infrastructure Hardening Lab
+
+## Overview
+
+This project demonstrates hands-on cloud security implementation using Azure virtual machines and Linux-based security hardening techniques.
+
+The lab simulates real-world attack detection and automated defense mechanisms.
+
+---
+
+## Environment
+
+- Microsoft Azure VM (Ubuntu 22.04)
+- Wazuh SIEM (Manager + Agent)
+- UFW Firewall
+- Fail2Ban
+- Public-facing SSH server
+
+---
+
+## Implementations
+
+### 1. SIEM Deployment
+- Installed Wazuh Manager
+- Deployed Wazuh Agent
+- Monitored authentication logs
+- Verified agent connectivity
+
+### 2. Brute Force Detection
+- Detected repeated SSH login attempts
+- Identified malicious IP addresses
+- Observed rule triggers (Rule 5710 and related authentication rules)
+
+### 3. File Integrity Monitoring (FIM)
+- Enabled syscheck
+- Monitored /etc directory
+- Triggered real-time file modification alerts
+
+### 4. Host Firewall Hardening
+- Enabled UFW
+- Allowed SSH securely
+- Implemented rate limiting:
+  
+  sudo ufw limit 22/tcp
+  
+- Manually blocked malicious IP addresses
+
+### 5. Automatic Protection with Fail2Ban
+- Installed and configured Fail2Ban
+- Monitored /var/log/auth.log
+- Automatically banned brute-force attackers
+- Verified banned IP list
+
+---
+
+## Security Outcome
+
+The server is protected using:
+
+- Real-time intrusion detection
+- Automated brute-force mitigation
+- Layered firewall controls
+- Log-driven security monitoring
+
+---
+
+## Skills Demonstrated
+
+- Linux Administration
+- Cloud Infrastructure Deployment
+- Log Analysis
+- Firewall Configuration
+- Intrusion Detection
+- Service Troubleshooting
+- Incident Response Fundamentals
