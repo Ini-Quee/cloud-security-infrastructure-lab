@@ -73,3 +73,191 @@ The server is protected using:
 - Intrusion Detection
 - Service Troubleshooting
 - Incident Response Fundamentals
+
+## Troubleshooting & Lessons Learned
+
+During the deployment of this cloud security lab, several real-world configuration and system issues occurred. Troubleshooting these problems was a key part of the learning process.
+
+---
+
+### 1. Wazuh Manager Failed to Start
+
+After modifying the Wazuh configuration file (`ossec.conf`) to enable email alerts, the Wazuh manager service failed to start.
+
+Command used:
+
+```
+sudo systemctl restart wazuh-manager
+```
+
+Error returned:
+
+```
+Job for wazuh-manager.service failed because the control process exited with error code.
+```
+
+To diagnose the problem, the following commands were used:
+
+```
+sudo systemctl status wazuh-manager.service
+sudo journalctl -xeu wazuh-manager.service
+```
+
+The logs revealed a configuration error inside the Wazuh configuration file.
+
+---
+
+### 2. Invalid Configuration Elements in Wazuh
+
+While testing the configuration manually, the following command was used:
+
+```
+sudo /var/ossec/bin/wazuh-analysisd -t
+```
+
+Error received:
+
+```
+Invalid element in the configuration: 'email'
+Invalid element in the configuration: 'smtp_auth'
+Invalid element in the configuration: 'email_notification'
+Configuration error at 'etc/ossec.conf'
+```
+
+This occurred because unsupported email configuration parameters were added to the `ossec.conf` file.
+
+Resolution:
+
+- Removed unsupported elements from the configuration
+- Restored a working configuration version
+- Verified configuration syntax before restarting services
+
+---
+
+### 3. Wazuh Service Crash Due to Configuration Corruption
+
+After multiple edits to the configuration file, the Wazuh manager could no longer start.
+
+Diagnosis steps:
+
+```
+sudo systemctl status wazuh-manager
+sudo journalctl -xeu wazuh-manager.service
+```
+
+Resolution:
+
+- Located backup configuration files in `/var/ossec/etc/`
+- Replaced the broken configuration with a working version
+- Restarted the manager service
+
+This restored normal operation.
+
+---
+
+### 4. Firewall Not Enabled on Initial Deployment
+
+When checking the firewall status, the system returned:
+
+```
+sudo ufw status
+Status: inactive
+```
+
+Resolution:
+
+Enabled the firewall and allowed SSH access:
+
+```
+sudo ufw allow 22/tcp
+sudo ufw enable
+```
+
+To mitigate brute-force attempts, SSH rate limiting was applied:
+
+```
+sudo ufw limit 22/tcp
+```
+
+This restricts repeated SSH connection attempts.
+
+---
+
+### 5. Manual Blocking of Malicious IP Address
+
+During attack simulation, a malicious IP address was identified.
+
+The IP was blocked manually using UFW:
+
+```
+sudo ufw deny from 143.110.251.235
+```
+
+Firewall rules were verified with:
+
+```
+sudo ufw status numbered
+```
+
+---
+
+### 6. Automatic Attack Mitigation with Fail2Ban
+
+Fail2Ban was installed to automatically block attackers attempting SSH brute-force attacks.
+
+Command used to verify protection:
+
+```
+sudo fail2ban-client status
+sudo fail2ban-client status sshd
+```
+
+Output confirmed automatic banning of attacker IPs.
+
+Example banned IPs:
+
+- 134.199.174.174
+- 104.248.173.141
+- 206.189.110.138
+- 157.245.70.199
+- 107.170.58.127
+
+Total authentication failures detected: **240+ attempts**
+
+This demonstrated automated threat mitigation.
+
+---
+
+### 7. Git Not Installed on Local Machine
+
+While attempting to push the project to GitHub, the following error occurred:
+
+```
+git : The term 'git' is not recognized
+```
+
+This indicated Git was not installed on the system.
+
+Resolution:
+
+Installed Git and verified installation:
+
+```
+git --version
+```
+
+After installation, the repository was successfully pushed to GitHub.
+
+---
+
+### Key Skills Developed
+
+Troubleshooting these issues strengthened practical skills in:
+
+- Linux system administration
+- Service troubleshooting
+- Log analysis
+- Firewall configuration
+- Security monitoring
+- Git version control
+- Cloud security operations
