@@ -1,263 +1,115 @@
-# Cloud Security & Infrastructure Hardening Lab
+# Cloud Security Infrastructure Lab
 
-## Overview
+## Project Overview
 
-This project demonstrates hands-on cloud security implementation using Azure virtual machines and Linux-based security hardening techniques.
+This project demonstrates how to build a basic **cloud security monitoring infrastructure** using Microsoft Azure, Wazuh, and Linux security tools.
 
-The lab simulates real-world attack detection and automated defense mechanisms.
+The goal of this lab was to simulate real-world attack attempts and monitor how security tools detect and respond to those threats.
 
----
+This project includes:
 
-## Environment
-
-- Microsoft Azure VM (Ubuntu 22.04)
-- Wazuh SIEM (Manager + Agent)
-- UFW Firewall
-- Fail2Ban
-- Public-facing SSH server
+* Cloud infrastructure deployment
+* Security monitoring using Wazuh
+* SSH attack detection
+* Firewall protection using UFW
+* Automated attack blocking using Fail2Ban
 
 ---
 
-## Implementations
+## Architecture
 
-### 1. SIEM Deployment
-- Installed Wazuh Manager
-- Deployed Wazuh Agent
-- Monitored authentication logs
-- Verified agent connectivity
+The lab environment includes:
 
-### 2. Brute Force Detection
-- Detected repeated SSH login attempts
-- Identified malicious IP addresses
-- Observed rule triggers (Rule 5710 and related authentication rules)
+* **Azure Virtual Machine (Ubuntu 22.04)**
+* **Wazuh Manager**
+* **Wazuh Agent**
+* **Fail2Ban intrusion prevention**
+* **UFW firewall configuration**
 
-### 3. File Integrity Monitoring (FIM)
-- Enabled syscheck
-- Monitored /etc directory
-- Triggered real-time file modification alerts
-
-### 4. Host Firewall Hardening
-- Enabled UFW
-- Allowed SSH securely
-- Implemented rate limiting:
-  
-  sudo ufw limit 22/tcp
-  
-- Manually blocked malicious IP addresses
-
-### 5. Automatic Protection with Fail2Ban
-- Installed and configured Fail2Ban
-- Monitored /var/log/auth.log
-- Automatically banned brute-force attackers
-- Verified banned IP list
+Security events are monitored and visualized in the **Wazuh dashboard**.
 
 ---
 
-## Security Outcome
+## Security Tools Used
 
-The server is protected using:
-
-- Real-time intrusion detection
-- Automated brute-force mitigation
-- Layered firewall controls
-- Log-driven security monitoring
-
----
-
-## Skills Demonstrated
-
-- Linux Administration
-- Cloud Infrastructure Deployment
-- Log Analysis
-- Firewall Configuration
-- Intrusion Detection
-- Service Troubleshooting
-- Incident Response Fundamentals
-
-## Troubleshooting & Lessons Learned
-
-During the deployment of this cloud security lab, several real-world configuration and system issues occurred. Troubleshooting these problems was a key part of the learning process.
+| Tool            | Purpose                      |
+| --------------- | ---------------------------- |
+| Microsoft Azure | Cloud infrastructure         |
+| Wazuh           | Security monitoring and SIEM |
+| Fail2Ban        | Automated attack blocking    |
+| UFW             | Linux firewall               |
+| SSH logs        | Authentication monitoring    |
 
 ---
 
-### 1. Wazuh Manager Failed to Start
+## Attack Simulation
 
-After modifying the Wazuh configuration file (`ossec.conf`) to enable email alerts, the Wazuh manager service failed to start.
+During testing, multiple failed SSH login attempts were generated to simulate brute-force attacks.
 
-Command used:
+The system successfully detected:
 
-```
-sudo systemctl restart wazuh-manager
-```
+* Invalid login attempts
+* Authentication failures
+* Unauthorized access attempts
 
-Error returned:
-
-```
-Job for wazuh-manager.service failed because the control process exited with error code.
-```
-
-To diagnose the problem, the following commands were used:
-
-```
-sudo systemctl status wazuh-manager.service
-sudo journalctl -xeu wazuh-manager.service
-```
-
-The logs revealed a configuration error inside the Wazuh configuration file.
+These events were logged and visualized in the Wazuh dashboard.
 
 ---
 
-### 2. Invalid Configuration Elements in Wazuh
+## Security Detection Results
 
-While testing the configuration manually, the following command was used:
+The system detected and logged several attack attempts including:
 
-```
-sudo /var/ossec/bin/wazuh-analysisd -t
-```
+* Brute force SSH login attempts
+* Invalid user authentication
+* Unauthorized login activity
 
-Error received:
-
-```
-Invalid element in the configuration: 'email'
-Invalid element in the configuration: 'smtp_auth'
-Invalid element in the configuration: 'email_notification'
-Configuration error at 'etc/ossec.conf'
-```
-
-This occurred because unsupported email configuration parameters were added to the `ossec.conf` file.
-
-Resolution:
-
-- Removed unsupported elements from the configuration
-- Restored a working configuration version
-- Verified configuration syntax before restarting services
+Fail2Ban automatically banned malicious IP addresses after repeated failed login attempts.
 
 ---
 
-### 3. Wazuh Service Crash Due to Configuration Corruption
+## Screenshots
 
-After multiple edits to the configuration file, the Wazuh manager could no longer start.
+### Azure Virtual Machine
 
-Diagnosis steps:
+![Azure VM](screenshots/01-azure-vm.png)
 
-```
-sudo systemctl status wazuh-manager
-sudo journalctl -xeu wazuh-manager.service
-```
+### Wazuh Dashboard
 
-Resolution:
+![Wazuh Dashboard](screenshots/02-wazuh-dashboard.png)
 
-- Located backup configuration files in `/var/ossec/etc/`
-- Replaced the broken configuration with a working version
-- Restarted the manager service
+### Wazuh Agent Status
 
-This restored normal operation.
+![Agent Status](screenshots/03-agent-status.png)
 
----
+### UFW Firewall Rules
 
-### 4. Firewall Not Enabled on Initial Deployment
+![UFW Rules](screenshots/04-ufw-rules.png)
 
-When checking the firewall status, the system returned:
+### Fail2Ban Protection
 
-```
-sudo ufw status
-Status: inactive
-```
-
-Resolution:
-
-Enabled the firewall and allowed SSH access:
-
-```
-sudo ufw allow 22/tcp
-sudo ufw enable
-```
-
-To mitigate brute-force attempts, SSH rate limiting was applied:
-
-```
-sudo ufw limit 22/tcp
-```
-
-This restricts repeated SSH connection attempts.
+![Fail2Ban](screenshots/05-fail2ban-status.png)
 
 ---
 
-### 5. Manual Blocking of Malicious IP Address
+## Key Learning Outcomes
 
-During attack simulation, a malicious IP address was identified.
+Through this project I learned how to:
 
-The IP was blocked manually using UFW:
-
-```
-sudo ufw deny from 143.110.251.235
-```
-
-Firewall rules were verified with:
-
-```
-sudo ufw status numbered
-```
+* Deploy a Linux server in the cloud
+* Configure security monitoring infrastructure
+* Detect suspicious login attempts
+* Configure firewall rules
+* Automate threat response using Fail2Ban
+* Monitor security alerts using Wazuh
 
 ---
 
-### 6. Automatic Attack Mitigation with Fail2Ban
+## Future Improvements
 
-Fail2Ban was installed to automatically block attackers attempting SSH brute-force attacks.
+Future improvements to this lab could include:
 
-Command used to verify protection:
-
-```
-sudo fail2ban-client status
-sudo fail2ban-client status sshd
-```
-
-Output confirmed automatic banning of attacker IPs.
-
-Example banned IPs:
-
-- 134.199.174.174
-- 104.248.173.141
-- 206.189.110.138
-- 157.245.70.199
-- 107.170.58.127
-
-Total authentication failures detected: **240+ attempts**
-
-This demonstrated automated threat mitigation.
-
----
-
-### 7. Git Not Installed on Local Machine
-
-While attempting to push the project to GitHub, the following error occurred:
-
-```
-git : The term 'git' is not recognized
-```
-
-This indicated Git was not installed on the system.
-
-Resolution:
-
-Installed Git and verified installation:
-
-```
-git --version
-```
-
-After installation, the repository was successfully pushed to GitHub.
-
----
-
-### Key Skills Developed
-
-Troubleshooting these issues strengthened practical skills in:
-
-- Linux system administration
-- Service troubleshooting
-- Log analysis
-- Firewall configuration
-- Security monitoring
-- Git version control
-- Cloud security operations
+* Multi-agent monitoring
+* SIEM alert automation
+* Threat intelligence integration
+* Security automation using scripts
