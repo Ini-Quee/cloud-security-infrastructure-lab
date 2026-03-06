@@ -88,7 +88,7 @@ Fail2Ban automatically banned malicious IP addresses after repeated failed login
 
 ### Fail2Ban Protection
 
-![Fail2Ban](screenshots/05-fail2ban-status..png)
+![Fail2Ban](screenshots/05-fail2ban-status.png)
 
 ---
 
