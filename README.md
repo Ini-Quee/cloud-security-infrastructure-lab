@@ -1,5 +1,13 @@
 # Cloud Security Infrastructure Lab
 
+
+![Azure](https://img.shields.io/badge/Cloud-Microsoft%20Azure-blue)
+![Linux](https://img.shields.io/badge/OS-Linux-yellow)
+![Wazuh](https://img.shields.io/badge/SIEM-Wazuh-orange)
+![Security](https://img.shields.io/badge/Focus-Cloud%20Security-red)
+![Firewall](https://img.shields.io/badge/Firewall-UFW-green)
+![Automation](https://img.shields.io/badge/Security-Fail2Ban-purple)
+
 ## Project Overview
 
 This project demonstrates how to build a basic **cloud security monitoring infrastructure** using Microsoft Azure, Wazuh, and Linux security tools.
