@@ -124,7 +124,7 @@ sudo systemctl start wazuh-agent
 
 ## 🚨 Attack Simulation & Detection
 
-To validate the security monitoring environment, an SSH brute-force attack was simulated against the Linux server.
+To validate the security monitoring environment, an SSH brute-force attack was simulated against the Linux server. This test demonstrates how Wazuh, Fail2Ban, and firewall controls detect and respond to unauthorized access attempts.
 
 - ❌ Multiple failed authentication attempts from external IPs
 - ❌ Invalid username login attempts
@@ -136,23 +136,35 @@ To validate the security monitoring environment, an SSH brute-force attack was s
 > During live testing, **real external IP addresses** were also observed attempting logins — demonstrating that any internet-exposed server faces constant automated attack attempts.
 
 ---
+## 🔍 Security Outcome
+
+The simulated attack confirmed that the monitoring environment successfully detects and responds to suspicious authentication behavior.
+
+Key protections demonstrated:
+
+• Real-time intrusion detection with Wazuh
+• Automated IP blocking with Fail2Ban
+• Firewall-based traffic control using UFW
+• Log-based threat investigation
+
+---
 
 ## 📸 Screenshots
 
 ### Azure Virtual Machine — Deployment
-![Azure VM](https://raw.githubusercontent.com/Ini-Quee/cloud-security-infrastructure-lab/main/screenshots/01-azure-vm.png)
+![Azure VM](screenshots/01-azure-vm.png)
 
 ### Wazuh Dashboard — Security Events
-![Wazuh Dashboard](https://raw.githubusercontent.com/Ini-Quee/cloud-security-infrastructure-lab/main/screenshots/02-wazuh-dashboard.png)
+![Wazuh Dashboard](screenshots/02-wazuh-dashboard.png)
 
 ### Wazuh Agent — Connected & Active
-![Agent Status](https://raw.githubusercontent.com/Ini-Quee/cloud-security-infrastructure-lab/main/screenshots/03-agent-status.png)
+![Agent Status](screenshots/03-agent-status.png)
 
 ### UFW Firewall — Active Rules
-![UFW Rules](https://raw.githubusercontent.com/Ini-Quee/cloud-security-infrastructure-lab/main/screenshots/04-ufw-rules.png)
+![UFW Rules](screenshots/04-ufw-rules.png)
 
 ### Fail2Ban — Banned IPs After Attack Simulation
-![Fail2Ban](https://raw.githubusercontent.com/Ini-Quee/cloud-security-infrastructure-lab/main/screenshots/05-fail2ban-status.png)
+![Fail2Ban](screenshots/05-fail2ban-status.png)
 
 ---
 
@@ -169,6 +181,8 @@ To validate the security monitoring environment, an SSH brute-force attack was s
 ---
 
 ## 🔮 What's Next
+
+This lab is actively evolving. Current work in progress:
 
 - [ ] **Multi-VM monitoring** — connect a second Azure VM as an additional Wazuh agent
 - [ ] **Kubernetes security lab** — deploy a K8s cluster and monitor container workloads with Wazuh
