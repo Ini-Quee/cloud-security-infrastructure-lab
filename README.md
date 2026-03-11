@@ -124,7 +124,7 @@ sudo systemctl start wazuh-agent
 
 ## 🚨 Attack Simulation & Detection
 
-To validate the monitoring setup, SSH brute-force attempts were simulated against the server. The following was observed and detected:
+To validate the security monitoring environment, an SSH brute-force attack was simulated against the Linux server. This test demonstrates how Wazuh, Fail2Ban, and firewall controls detect and respond to unauthorized access attempts.
 
 - ❌ Multiple failed authentication attempts from external IPs
 - ❌ Invalid username login attempts
@@ -134,6 +134,18 @@ To validate the monitoring setup, SSH brute-force attempts were simulated agains
 - ✅ UFW firewall blocked all non-whitelisted traffic
 
 > During live testing, **real external IP addresses** were also observed attempting logins — demonstrating that any internet-exposed server faces constant automated attack attempts.
+
+---
+## 🔍 Security Outcome
+
+The simulated attack confirmed that the monitoring environment successfully detects and responds to suspicious authentication behavior.
+
+Key protections demonstrated:
+
+• Real-time intrusion detection with Wazuh
+• Automated IP blocking with Fail2Ban
+• Firewall-based traffic control using UFW
+• Log-based threat investigation
 
 ---
 
